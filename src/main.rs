@@ -7,7 +7,7 @@ use serenity::{
     builder::{CreateEmbed, CreateEmbedAuthor, CreateMessage},
     model::colour::Colour,
     model::Timestamp,
-    model::{channel::Message, gateway::Ready, guild::Guild},
+    model::{channel::Message, gateway::Ready},
     prelude::*,
 };
 use std::env;
@@ -269,7 +269,7 @@ impl EventHandler for Handler {
                                 user.id, user.username, user.nationality, user.career_level, user.role, user.tech_stack
                             );
                             send_embed_message(
-                                "!getuser",
+                                "!get-username",
                                 &message_details,
                                 Colour::DARK_BLUE,
                                 &ctx,
@@ -447,7 +447,7 @@ async fn main() {
     dotenv().ok();
 
     let token = env::var("DISCORD_TOKEN").expect("Expected a token in the environment");
-    let base_url = env::var("API_BASE_URL").expect("Expected a base URL in the environment");
+    let base_url = "https://superna.ytechno.com.ng/api";
     let http_client = ReqwestClient::new();
 
     let intents = GatewayIntents::GUILD_MESSAGES | GatewayIntents::MESSAGE_CONTENT;
@@ -455,7 +455,7 @@ async fn main() {
     let mut client = Client::builder(&token, intents)
         .event_handler(Handler {
             http_client,
-            base_url,
+            base_url: base_url.to_string(),
         })
         .await
         .expect("Err creating client");
