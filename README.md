@@ -38,4 +38,14 @@ To get started with Stack-Buddy, follow these steps:
     ```sh
     cargo build
     cargo run
-    ``` 
+    
+
+## Usage
+To get started with using the bot, invite the bot to your desired server using the link below 
+[Invite Bot to server](https://discord.com/oauth2/authorize?client_id=1269716111096811525&permissions=275683306512&integration_type=0&scope=bot)
+
+In order to get the bot online, ensure the command `cargo run` is running in your terminal
+
+Use the command `!help` to see the list of available commands and what they do.
+
+Peace 🍀
