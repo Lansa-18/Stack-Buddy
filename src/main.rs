@@ -4,7 +4,7 @@ use serde::Deserialize;
 use serenity::Client;
 use serenity::{
     async_trait,
-    builder::{CreateEmbed, CreateEmbedAuthor, CreateMessage},
+    builder::{CreateEmbed, CreateEmbedAuthor, CreateMessage, EditMessage},
     model::colour::Colour,
     model::Timestamp,
     model::{channel::Message, gateway::Ready},
@@ -12,7 +12,42 @@ use serenity::{
 };
 use std::env;
 use std::error::Error;
-use tokio;
+use tokio::time::{sleep, Duration};
+
+
+/// NOT YET WORKING
+async fn update_message_content(ctx: &Context, msg: &mut Message, content: &str) {
+    let new_content = content.to_string();
+    let edit_message = EditMessage::new().content(new_content);
+    if let Err(why) = msg.edit(&ctx.http, edit_message).await {
+        println!("Error editing message: {}", why);
+    }
+}
+
+
+/// NOT YET WORKING
+async fn show_loading_animation(ctx: &Context, msg: &Message, initial_message: &str) -> Message {
+    let mut embed = CreateEmbed::default()
+    .description(initial_message)
+    .color(Colour::DARK_BLUE);
+
+    let mut message = CreateMessage::default().embed(embed.clone());
+
+    // Send initial message
+    let mut loading_msg = msg.channel_id.send_message(&ctx.http, message).await.unwrap();
+
+    // Create a loading animation
+    let loading_states = ["Loading.", "Loading..", "Loading...", "Loading...."];
+    for state in &loading_states {
+        embed = embed.description(*state);
+        let edit_message = EditMessage::new().embed(embed.clone());
+
+        loading_msg.edit(&ctx.http, edit_message).await.unwrap();
+        sleep(Duration::from_secs(1)).await;
+    }
+
+    loading_msg
+}
 
 // Messages
 const HELP_MESSAGE: &str = "
@@ -247,8 +282,7 @@ async fn send_embed_message(
 
         // Create the message with the embed
         let message = CreateMessage::default().embed(embed);
-
-        // Send the message to the channel and handle any errors
+        
         if let Err(why) = msg.channel_id.send_message(&ctx.http, message).await {
             println!("Error sending message: {:?}", why);
         }
@@ -288,6 +322,9 @@ impl EventHandler for Handler {
 
 impl Handler {
     async fn handle_get_username(&self, ctx: &Context, msg: &Message) {
+        // Show loading animation
+        let loading_msg = show_loading_animation(ctx, msg, "Loading...").await;
+
         let user_id: i32 = 1;
         // Check if the user ID is valid
         if user_id > 0 {
@@ -321,7 +358,7 @@ impl Handler {
         }
     }
 
-    async fn handle_help(&self, ctx: &Context, msg: &Message) {
+async fn handle_help(&self, ctx: &Context, msg: &Message) {
         // Send the help message as an embed
         send_embed_message("!help", HELP_MESSAGE, Colour::DARK_GREEN, &ctx, &msg, None).await;
     }
@@ -332,6 +369,9 @@ impl Handler {
     }
 
     async fn handle_get_balance(&self, ctx: &Context, msg: &Message) {
+        // Show loading animation
+        let loading_msg = show_loading_animation(ctx, msg, "Loading...").await;
+
         let user_id: i32 = 1;
         // Fetch user balance and handle the result
         match get_user_balance(&self.http_client, &self.base_url, user_id).await {
@@ -358,6 +398,9 @@ impl Handler {
     }
 
     async fn handle_get_profile(&self, ctx: &Context, msg: &Message) {
+        // Show loading animation
+        let loading_msg = show_loading_animation(ctx, msg, "Loading...").await;
+
         let user_id: i32 = 1;
         // Fetch user profile and handle the result
         match get_user_progress(&self.http_client, &self.base_url, user_id).await {
@@ -389,6 +432,9 @@ impl Handler {
     }
 
     async fn handle_get_campaigns(&self, ctx: &Context, msg: &Message) {
+        // Show loading animation
+        let loading_msg = show_loading_animation(ctx, msg, "Loading...").await;
+
         // Fetch featured campaigns and handle the result
         match get_featured_campaigns(&self.http_client, &self.base_url).await {
             Ok(campaigns) => {
@@ -420,6 +466,9 @@ impl Handler {
     }
 
     async fn handle_get_pathways(&self, ctx: &Context, msg: &Message) {
+        // Show loading animation
+        let loading_msg = show_loading_animation(ctx, msg, "Loading...").await;
+
         // Fetch featured pathways and handle the result
         match get_pathways(&self.http_client, &self.base_url).await {
             Ok(pathways) => {
@@ -451,6 +500,9 @@ impl Handler {
     }
 
     async fn handle_get_hackathons(&self, ctx: &Context, msg: &Message) {
+        // Show loading animation
+        let loading_msg = show_loading_animation(ctx, msg, "Loading...").await;
+
         // Fetch upcoming hackathons and handle the result
         match get_hackathons(&self.http_client, &self.base_url).await {
             Ok(hackathons) => {
@@ -482,6 +534,9 @@ impl Handler {
     }
 
     async fn handle_get_calendar(&self, ctx: &Context, msg: &Message) {
+        // Show loading animation
+        let loading_msg = show_loading_animation(ctx, msg, "Loading...").await;
+
         // Define the calendar link and image URL
         let calendar_link = "https://stackup.dev/calendar";
         const CALENDAR_IMG_URL: &str = "https://i.imgur.com/hxxfDQ9.png";
