@@ -55,11 +55,13 @@ To get started with Stack-Buddy, follow these steps:
     
 
 ## Usage
-To get started with using the bot, invite the bot to your desired server using the link below 
-[Invite Bot to server](https://discord.com/oauth2/authorize?client_id=1269716111096811525&permissions=275683306512&integration_type=0&scope=bot)
-
-In order to get the bot online, ensure the command `cargo run` is running in your terminal
-
-Use the command `!help` to see the list of available commands and what they do.
+**To get started with using the bot, follow these steps:**
+1. **Ensure you've completed the setup:** Double-check that you've followed all the previous steps correctly, including defining your Discord bot's token in the `.env` file.
+2. **Get your bot's invite link:** Head to the [Discord Developer Portal](https://discord.com/developers/applications/1269716111096811525/oauth2), select your application, and navigate to the OAuth2 section. Choose the "bot" option and select the required permissions for your bot. Copy the generated invite link.
+3. **Invite the bot to your server:** Use the invite link to add the bot to your Discord server. By default, the bot will be offline.
+4. **Start the bot:** Run the command cargo run in your terminal to bring the bot online.
+5. **Explore available commands:** Use the `!help` command to see a list of available commands and their descriptions.
+   
+That's it! You're now ready to start using the bot.
 
 Peace 🍀
