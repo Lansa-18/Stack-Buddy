@@ -65,6 +65,7 @@ To get started with Stack-Buddy, follow these steps:
 That's it! You're now ready to start using the bot.
 
 ## Demo Video
-[Link to the demo video](https://youtu.be/WL95uuwIu8Y)
+![YouTube Video Screenshot](./yt-screenshot.png)
+[Watch on YouTube](https://youtu.be/WL95uuwIu8Y)
 
-Peace 🍀
+Peace ✌️✌️🍀
