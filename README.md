@@ -62,4 +62,7 @@ In order to get the bot online, ensure the command `cargo run` is running in you
 
 Use the command `!help` to see the list of available commands and what they do.
 
+## Demo Video
+[Link to the demo video](https://youtu.be/WL95uuwIu8Y)
+
 Peace 🍀
